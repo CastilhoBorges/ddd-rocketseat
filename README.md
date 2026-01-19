@@ -1,0 +1,2 @@
+- Dominio
+  - O Codigo que pode existir independente do seu contexto, claro, que seja javascript
