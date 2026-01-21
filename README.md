@@ -21,3 +21,5 @@
 - Entendemos nossa entidades e casos de uso, por meio da conversa que temos com os Domain Experts
 
 - A forma de implementar DDD vai do seu jeito, no nosso caso, vamos usar POO (Programação Orientada a Objetos)
+
+- Value Object, classes para tratar as regras de negocios das nossas entidades
