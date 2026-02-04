@@ -1,36 +1,32 @@
-import { UniqueEntityId } from '../../../../core/entities/unique-entity-id.js';
-import { Answer } from '../../enterprise/entities/answer.js';
-import { Question } from '../../enterprise/entities/question.js';
 import type { QuestionRepository } from '../repositories/question-repository.js';
 
-interface CreateQuestionUseCaseRequest {
+interface DeleteQuestionUseCaseRequest {
   authorId: string;
-  title: string;
-  content: string;
+  questionId: string;
 }
 
-interface CreateQuestionUseCaseResponse {
-  question: Question;
-}
+interface DeleteQuestionUseCaseResponse {}
 
-export class CreateQuestionUseCase {
+export class DeleteQuestionUseCase {
   constructor(private questionRepository: QuestionRepository) {}
 
   async execute({
+    questionId,
     authorId,
-    content,
-    title,
-  }: CreateQuestionUseCaseRequest): Promise<CreateQuestionUseCaseResponse> {
-    const question = Question.create({
-      authorId: new UniqueEntityId(authorId),
-      title,
-      content,
-    });
+  }: DeleteQuestionUseCaseRequest): Promise<DeleteQuestionUseCaseResponse> {
+    const question = await this.questionRepository.findById(questionId);
 
-    await this.questionRepository.create(question);
+    if (!question) {
+      throw new Error('Question not found');
+    }
 
-    return {
-      question,
-    };
+    if (authorId !== question.authorId.toString()) {
+      throw new Error('Not allowed');
+    }
+      
+
+    await this.questionRepository.delete(question);
+
+    return {};
   }
 }
