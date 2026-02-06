@@ -1,64 +1,67 @@
-import { Entity } from '../../../../core/entities/entity.js'
-import type { UniqueEntityId } from '../../../../core/entities/unique-entity-id.js'
-import type { Optional } from '../../../../core/types/optional.js'
-import { Slug } from './value-objects/slug.js'
-
+import { Entity } from '../../../../core/entities/entity.js';
+import type { UniqueEntityId } from '../../../../core/entities/unique-entity-id.js';
+import type { Optional } from '../../../../core/types/optional.js';
+import { Slug } from './value-objects/slug.js';
 
 export interface QuestionProps {
-  authorId: UniqueEntityId
-  bestAnswerId?: UniqueEntityId
-  title: string
-  content: string
-  slug: Slug
-  createdAt: Date
-  updatedAt?: Date
+  authorId: UniqueEntityId;
+  bestAnswerId?: UniqueEntityId;
+  title: string;
+  content: string;
+  slug: Slug;
+  createdAt: Date;
+  updatedAt?: Date;
 }
 
 export class Question extends Entity<QuestionProps> {
   get authorId() {
-    return this.props.authorId
+    return this.props.authorId;
   }
 
-  get bestAnswerId() {
-    return this.props.bestAnswerId
+  get bestAnswerId(): UniqueEntityId | undefined {
+    return this.props.bestAnswerId;
   }
 
   get title() {
-    return this.props.title
+    return this.props.title;
   }
 
   get content() {
-    return this.props.content
+    return this.props.content;
   }
 
   get slug() {
-    return this.props.slug
+    return this.props.slug;
   }
 
   get createdAt() {
-    return this.props.createdAt
+    return this.props.createdAt;
   }
 
   get updatedAt() {
-    return this.props.updatedAt
+    return this.props.updatedAt;
   }
 
   get excerpt() {
-    return this.content.substring(0, 100).trimEnd().concat('...')
+    return this.content.substring(0, 100).trimEnd().concat('...');
   }
 
   set content(content: string) {
-    this.props.content = content
-    this.touch()
+    this.props.content = content;
+    this.touch();
   }
 
   set title(title: string) {
-    this.props.title = title
-    this.touch()
+    this.props.title = title;
+    this.touch();
+  }
+
+  set bestAnswerId(bestAnswerId: UniqueEntityId) {
+    this.props.bestAnswerId = bestAnswerId;
   }
 
   private touch() {
-    this.props.updatedAt = new Date()
+    this.props.updatedAt = new Date();
   }
 
   static create(
@@ -72,8 +75,8 @@ export class Question extends Entity<QuestionProps> {
         createdAt: new Date(),
       },
       id,
-    )
+    );
 
-    return question
+    return question;
   }
 }
