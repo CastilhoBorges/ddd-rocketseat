@@ -27,3 +27,5 @@
 - Criação de in memory repositories
 
 - Uso de factories para codigos repetitivos
+
+- Entidades a nivel de dominio, é diferente das entidades a nivel de persistencia. Criando o dominio criamos apenas oque é preciso dentro da nossa aplicação

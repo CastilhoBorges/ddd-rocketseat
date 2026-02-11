@@ -49,7 +49,7 @@ export class Answer extends Entity<AnswerProps> {
     props: Optional<AnswerProps, 'createdAt'>,
     id?: UniqueEntityId,
   ) {
-    const question = new Answer(
+    const answerComment = new Answer(
       {
         ...props,
         createdAt: new Date(),
@@ -57,6 +57,6 @@ export class Answer extends Entity<AnswerProps> {
       id,
     )
 
-    return question
+    return answerComment
   }
 }
