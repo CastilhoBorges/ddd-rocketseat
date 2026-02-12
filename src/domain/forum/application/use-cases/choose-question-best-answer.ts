@@ -1,15 +1,21 @@
+import { left, right, type Either } from '../../../../core/either.js';
 import type { Question } from '../../enterprise/entities/question.js';
 import type { AnswerRepository } from '../repositories/answers-repository.js';
 import type { QuestionRepository } from '../repositories/question-repository.js';
+import { NotAllowedError } from './erros/not-allowed-error.js';
+import { ResourceNotFoundError } from './erros/resource-not-found.error.js';
 
 interface ChooeQuestionBestAnswerUseCaseRequest {
   authorId: string;
   answerId: string;
 }
 
-interface ChooeQuestionBestAnswerUseCaseResponse {
-  question: Question;
-}
+type ChooeQuestionBestAnswerUseCaseResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  {
+    question: Question;
+  }
+>;
 
 export class ChooeQuestionBestAnswerUseCase {
   constructor(
@@ -24,7 +30,7 @@ export class ChooeQuestionBestAnswerUseCase {
     const answer = await this.answerRepository.findById(answerId);
 
     if (!answer) {
-      throw new Error('Answer not found');
+      throw left(new ResourceNotFoundError());
     }
 
     const question = await this.questionRepository.findById(
@@ -32,15 +38,15 @@ export class ChooeQuestionBestAnswerUseCase {
     );
 
     if (!question) {
-      throw new Error('Question not found');
+      throw left(new ResourceNotFoundError());
     }
 
     if (authorId !== question.authorId.toString()) {
-      throw new Error('Not allowed');
+      throw left(new NotAllowedError());
     }
 
     question.bestAnswerId = answer.id;
 
-    return { question };
+    return right({ question });
   }
 }
