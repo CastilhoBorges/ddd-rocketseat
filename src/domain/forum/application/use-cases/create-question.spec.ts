@@ -12,12 +12,13 @@ describe('Create Question Use Case', () => {
   });
 
   it('should be create a Question', async () => {
-    const { question } = await sut.execute({
+    const result = await sut.execute({
       authorId: '1',
       title: 'New Question',
       content: 'Conteudo da pergunta',
     });
 
-    expect(question.id).toBeTruthy();
+    expect(result.isRight()).toBe(true);
+    expect(result.value?.question.id).toBeTruthy();
   });
 });

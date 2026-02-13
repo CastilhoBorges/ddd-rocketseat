@@ -5,19 +5,19 @@ import type { QuestionRepository } from '../repositories/question-repository.js'
 import { NotAllowedError } from './erros/not-allowed-error.js';
 import { ResourceNotFoundError } from './erros/resource-not-found.error.js';
 
-interface ChooeQuestionBestAnswerUseCaseRequest {
+interface ChooseQuestionBestAnswerUseCaseRequest {
   authorId: string;
   answerId: string;
 }
 
-type ChooeQuestionBestAnswerUseCaseResponse = Either<
+type ChooseQuestionBestAnswerUseCaseResponse = Either<
   ResourceNotFoundError | NotAllowedError,
   {
     question: Question;
   }
 >;
 
-export class ChooeQuestionBestAnswerUseCase {
+export class ChooseQuestionBestAnswerUseCase {
   constructor(
     private answerRepository: AnswerRepository,
     private questionRepository: QuestionRepository,
@@ -26,11 +26,11 @@ export class ChooeQuestionBestAnswerUseCase {
   async execute({
     answerId,
     authorId,
-  }: ChooeQuestionBestAnswerUseCaseRequest): Promise<ChooeQuestionBestAnswerUseCaseResponse> {
+  }: ChooseQuestionBestAnswerUseCaseRequest): Promise<ChooseQuestionBestAnswerUseCaseResponse> {
     const answer = await this.answerRepository.findById(answerId);
 
     if (!answer) {
-      throw left(new ResourceNotFoundError());
+      return left(new ResourceNotFoundError());
     }
 
     const question = await this.questionRepository.findById(
@@ -38,11 +38,11 @@ export class ChooeQuestionBestAnswerUseCase {
     );
 
     if (!question) {
-      throw left(new ResourceNotFoundError());
+      return left(new ResourceNotFoundError());
     }
 
     if (authorId !== question.authorId.toString()) {
-      throw left(new NotAllowedError());
+      return left(new NotAllowedError());
     }
 
     question.bestAnswerId = answer.id;

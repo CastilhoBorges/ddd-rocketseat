@@ -13,16 +13,17 @@ describe('Get Question by slug Use Case', () => {
     sut = new GetQuestionUseCase(inMemoryQuestionRepository);
   });
 
-  it('should be albe to get a question by slug', async () => {
+  it('should be able to get a question by slug', async () => {
     const newQuestion = makeQuestion({ slug: Slug.create('new-question') });
 
-    inMemoryQuestionRepository.create(newQuestion);
+    await inMemoryQuestionRepository.create(newQuestion);
 
-    const { question } = await sut.execute({
+    const result = await sut.execute({
       slug: 'new-question',
     });
 
-    expect(question.id).toBeTruthy();
-    expect(question.title).toEqual(newQuestion.title);
+    expect(result.isRight()).toBe(true);
+    expect(result.value?.question.id).toBeTruthy();
+    expect(result.value?.question.title).toEqual(newQuestion.title);
   });
 });
